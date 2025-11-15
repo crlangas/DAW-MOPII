@@ -161,6 +161,56 @@ tienda_forestal_mvc/
 └── db/                         # Inicialización de la base de datos
     └── init.sql
 
+**Ejemplo de prueba desde curl o Postman:**
+- GET todos los productos:
+    GET http://localhost:5000/api/productos
+- GET un producto por ID:
+    GET http://localhost:5000/api/productos/5
+- POST crear producto:
+{
+  "nombre": "Motosierra Prueba",
+  "tipo": "motosierra",
+  "marca": "TestBrand",
+  "descripcion": "Herramienta de ejemplo",
+  "precio": 199.99,
+  "stock": 10,
+  "imagen": "motosierra_test.jpg"
+}
+- PUT actualizar producto:
+    PUT http://localhost:5000/api/productos/5
+- DELETE eliminar producto:
+    DELETE http://localhost:5000/api/productos/5
+
+**Ejemplo de prueba de búsqueda:**
+| Acción                   | Ejemplo de URL                                                       | Descripción                           |
+| ------------------------ | -------------------------------------------------------------------- | ------------------------------------- |
+| Buscar por palabra clave | `/api/productos/buscar?termino=hacha`                                | Busca "hacha" en nombre, tipo o marca |
+| Filtrar por tipo         | `/api/productos/filtrar?tipo=motosierra`                             | Devuelve solo motosierras             |
+| Filtrar por marca        | `/api/productos/filtrar?marca=STIHL`                                 | Devuelve productos de marca STIHL     |
+| Filtrar por precio       | `/api/productos/filtrar?precio_min=100&precio_max=500`               | Rango de precios                      |
+| Ordenar                  | `/api/productos/filtrar?ordenar=desc`                                | Ordena por precio descendente         |
+| Filtros combinados       | `/api/productos/filtrar?tipo=motosierra&marca=Husqvarna&ordenar=asc` | Filtro múltiple                       |
+
+| Concepto                              | Descripción                                                                            |
+| ------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Query parameters (`request.args`)** | Permiten enviar parámetros en la URL (`?clave=valor`) sin necesidad de un cuerpo JSON. |
+| **Consultas SQL dinámicas seguras**   | Usamos parámetros en `execute()` para evitar inyección SQL.                            |
+| **LIKE con comodines `%`**            | Permite coincidencias parciales en las búsquedas.                                      |
+| **Ordenación opcional**               | Demuestra cómo modificar consultas SQL en función de los argumentos.                   |
+
+**Ejemplo de uso con paginación:**
+- Página 1, 10 productos por página:
+    GET /api/productos/filtrar?pagina=1&por_pagina=10
+- Página 2, 10 productos por página, sólo motosierras STIHL:
+    GET /api/productos/filtrar?tipo=motosierra&marca=STIHL&pagina=2&por_pagina=10
+- Rango de precio y orden descendente:
+    GET /api/productos/filtrar?precio_min=100&precio_max=500&ordenar=desc&pagina=1&por_pagina=10
+
+Esto ofrece:
+- Paginación: se calcula un offset con (pagina - 1) * por_pagina y se usa LIMIT/OFFSET en MySQL.
+- Flexibilidad: el frontend puede solicitar cualquier página y tamaño de página.
+- Retorno JSON: ahora incluye pagina y por_pagina para que el frontend sepa en qué página está
+  y pueda mostrar controles de paginación.
 
 **CORS**
 CORS (Cross-Origin Resource Sharing) Se trata de un mecanismo de seguridad implementado
