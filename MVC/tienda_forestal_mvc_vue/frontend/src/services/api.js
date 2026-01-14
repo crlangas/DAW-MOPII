@@ -94,4 +94,17 @@ export async function actualizarProducto(id, payload) {
 export async function eliminarProducto(id) {
   const res = await axios.delete(`/api/productos/${id}`);
   return res.data;
+} 
+
+//funcion modificada
+export async function eliminarFiltrarProductos(params = {}) {
+  const query = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== null && value !== undefined && value !== "")
+      query.append(key, value);
+  }
+
+  const res = await axios.delete(`/api/productos/filtrar?${query.toString()}`);
+  return res.data; // devuelve { productos, total_resultados, pagina_actual, total_paginas }
 }
