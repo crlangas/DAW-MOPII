@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import Productos from './components/Productos.vue'
+import Productos from "./components/Productos.vue";
 </script>
 
 <style>
@@ -18,4 +18,3 @@ h1 {
   color: #1e4620;
 }
 </style>
-

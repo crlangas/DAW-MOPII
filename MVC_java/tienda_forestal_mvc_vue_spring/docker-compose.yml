@@ -1,0 +1,69 @@
+#version: "3.9" #Es un argumneto obsoleto.
+#              #Declaramos la version de la especificacion del archivo compose
+               #en las versiones actualizadas de docker no es necesario, ya que 
+               #lo detecta automaticamente.
+
+services:
+  #Desplegamos los servicios del backend en SpringBoot
+  backend:
+    build: ./backend-spring
+    container_name: tienda_spring_backend
+    ports:
+      - "5000:5000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/tienda_forestal
+      SPRING_DATASOURCE_USERNAME: tienda_user
+      SPRING_DATASOURCE_PASSWORD: tienda_pass
+      MYSQL_USER: mopii
+      MYSQL_PASSWORD: daw
+    depends_on:
+      - db
+
+  #Desplegamos los servicios del frontend
+  frontend:
+    build: ./frontend
+    container_name: tienda_vue_frontend
+    restart: no
+    ports:
+ #    - "8080:8080"
+      - "8080:80"
+    depends_on:
+      - backend
+        
+  #Desplegamos los servicios de la base de datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: tienda_mysql_db
+    restart: no 
+    environment:
+      MYSQL_ROOT_PASSWORD: iesmariamoliner
+      MYSQL_DATABASE: tienda_forestal
+      MYSQL_USER: mopii
+      MYSQL_PASSWORD: daw
+    ports:
+      - "3306:3306"
+    volumes:
+      # Persistencia de datos
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  #Incluimos el servicio phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_web
+    restart: no
+    ports:
+      - "8081:80"     # Acceso desde http://localhost:8081 
+                      # login:
+    environment:
+      PMA_HOST: db        # phpMyAdmin debe mirar al contenedor "db" creado con anterioridad
+  #   PMA_USER: root
+  #   PMA_PASSWORD: iesmariamoliner
+      PMA_USER: mopii
+      PMA_PASSWORD: daw
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+

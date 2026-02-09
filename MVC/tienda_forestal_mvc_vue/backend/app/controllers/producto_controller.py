@@ -17,17 +17,20 @@ from models import producto_model
 
 producto_blueprint = Blueprint("producto", __name__)
 
+
 # ---------------------------
 # Helpers para respuestas
 # ---------------------------
 def ok(data=None, message="OK", status=200):
     return jsonify({"status": "success", "message": message, "data": data}), status
 
+
 def error(message="Error", status=400, details=None):
     payload = {"status": "error", "message": message}
     if details:
         payload["details"] = details
     return jsonify(payload), status
+
 
 # ---------------------------
 # Rutas CRUD básicas
@@ -105,6 +108,7 @@ def eliminar_producto(producto_id):
 # Rutas especializadas (BUSCAR y FILTRAR)
 # ---------------------------
 
+
 @producto_blueprint.route("/productos/buscar", methods=["GET"])
 def buscar():
     """
@@ -129,6 +133,7 @@ def filtrar():
     Devuelve objeto con:
       productos, total_resultados, pagina_actual, total_paginas
     """
+
     # parseo seguro de parámetros numéricos
     def to_int(val, default):
         try:
@@ -164,10 +169,9 @@ def filtrar():
             precio_max=precio_max,
             ordenar=ordenar,
             pagina=pagina,
-            por_pagina=por_pagina
+            por_pagina=por_pagina,
         )
         # Aquí devolvemos la estructura tal y como el frontend espera
         return jsonify(resultado), 200
     except Exception as e:
         return error("Error en filtrado", 500, str(e))
-

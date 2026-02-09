@@ -20,6 +20,7 @@ import os
 import math
 import MySQLdb
 
+
 # -----------------------------------------
 # Conexión a base de datos MySQL
 # -----------------------------------------
@@ -29,12 +30,13 @@ def obtener_conexion():
     - Host, user, password y DB se configuran desde docker-compose.
     """
     return MySQLdb.connect(
-        host=os.getenv('MYSQL_HOST', 'db'),
-        user=os.getenv('MYSQL_USER', 'mopii'),
-        passwd=os.getenv('MYSQL_PASSWORD', 'daw'),
-        db=os.getenv('MYSQL_DB', 'tienda_forestal'),
-        charset='utf8mb4'
+        host=os.getenv("MYSQL_HOST", "db"),
+        user=os.getenv("MYSQL_USER", "mopii"),
+        passwd=os.getenv("MYSQL_PASSWORD", "daw"),
+        db=os.getenv("MYSQL_DB", "tienda_forestal"),
+        charset="utf8mb4",
     )
+
 
 # -----------------------------------------
 # CRUD básico
@@ -50,6 +52,7 @@ def obtener_productos():
     conn.close()
     return rows
 
+
 def obtener_producto_por_id(producto_id):
     """
     Devuelve un producto por su id o None si no existe.
@@ -60,6 +63,7 @@ def obtener_producto_por_id(producto_id):
     row = cur.fetchone()
     conn.close()
     return row
+
 
 def crear_producto(datos):
     """
@@ -72,19 +76,23 @@ def crear_producto(datos):
         INSERT INTO productos (nombre, tipo, marca, descripcion, precio, stock, imagen)
         VALUES (%s, %s, %s, %s, %s, %s, %s);
     """
-    cur.execute(query, (
-        datos.get('nombre'),
-        datos.get('tipo'),
-        datos.get('marca'),
-        datos.get('descripcion'),
-        datos.get('precio'),
-        datos.get('stock'),
-        datos.get('imagen')
-    ))
+    cur.execute(
+        query,
+        (
+            datos.get("nombre"),
+            datos.get("tipo"),
+            datos.get("marca"),
+            datos.get("descripcion"),
+            datos.get("precio"),
+            datos.get("stock"),
+            datos.get("imagen"),
+        ),
+    )
     conn.commit()
     last_id = cur.lastrowid
     conn.close()
     return last_id
+
 
 def actualizar_producto(producto_id, datos):
     """
@@ -97,20 +105,24 @@ def actualizar_producto(producto_id, datos):
         SET nombre=%s, tipo=%s, marca=%s, descripcion=%s, precio=%s, stock=%s, imagen=%s
         WHERE id=%s;
     """
-    cur.execute(query, (
-        datos.get('nombre'),
-        datos.get('tipo'),
-        datos.get('marca'),
-        datos.get('descripcion'),
-        datos.get('precio'),
-        datos.get('stock'),
-        datos.get('imagen'),
-        producto_id
-    ))
+    cur.execute(
+        query,
+        (
+            datos.get("nombre"),
+            datos.get("tipo"),
+            datos.get("marca"),
+            datos.get("descripcion"),
+            datos.get("precio"),
+            datos.get("stock"),
+            datos.get("imagen"),
+            producto_id,
+        ),
+    )
     conn.commit()
     rows = cur.rowcount
     conn.close()
     return rows
+
 
 def eliminar_producto(producto_id):
     """
@@ -123,6 +135,7 @@ def eliminar_producto(producto_id):
     rows = cur.rowcount
     conn.close()
     return rows
+
 
 # -----------------------------------------
 # Búsqueda (LIKE)
@@ -145,11 +158,19 @@ def buscar_productos(termino):
     conn.close()
     return rows
 
+
 # -----------------------------------------
 # Filtrado avanzado + paginación + orden
 # -----------------------------------------
-def filtrar_productos(tipo=None, marca=None, precio_min=None, precio_max=None,
-                      ordenar=None, pagina=1, por_pagina=10):
+def filtrar_productos(
+    tipo=None,
+    marca=None,
+    precio_min=None,
+    precio_max=None,
+    ordenar=None,
+    pagina=1,
+    por_pagina=10,
+):
     """
     Filtra productos por tipo/marca/rango de precio, ordena por precio (asc/desc) y aplica paginación.
     Devuelve un dict con:
@@ -182,7 +203,7 @@ def filtrar_productos(tipo=None, marca=None, precio_min=None, precio_max=None,
     # 1) Contar total de resultados (sin LIMIT)
     count_query = "SELECT COUNT(*) AS total FROM productos" + where + ";"
     cur.execute(count_query, params)
-    total_resultados = cur.fetchone()['total']
+    total_resultados = cur.fetchone()["total"]
 
     # Si no hay resultados, devolvemos estructura vacía
     if total_resultados == 0:
@@ -191,7 +212,7 @@ def filtrar_productos(tipo=None, marca=None, precio_min=None, precio_max=None,
             "productos": [],
             "total_resultados": 0,
             "pagina_actual": pagina,
-            "total_paginas": 0
+            "total_paginas": 0,
         }
 
     # 2) Calcular total_paginas y ajustar 'pagina' si es necesario
@@ -226,6 +247,5 @@ def filtrar_productos(tipo=None, marca=None, precio_min=None, precio_max=None,
         "productos": productos,
         "total_resultados": total_resultados,
         "pagina_actual": pagina,
-        "total_paginas": total_paginas
+        "total_paginas": total_paginas,
     }
-

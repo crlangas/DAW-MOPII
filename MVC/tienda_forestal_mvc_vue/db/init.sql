@@ -40,5 +40,10 @@ INSERT INTO productos (nombre, tipo, marca, descripcion, precio, stock, imagen) 
 ('Hacha Husqvarna X-Cut X162', 'hacha', 'Husqvarna', 'Hacha profesional de talá-intermedia', 69.00, 28, 'hacha_husqvarna_xcut_x162.jpg'),
 ('Maza Stanley FatMax FME-MFM18XB-1', 'maza', 'Stanley', 'Maza profesional para uso forestal con mango de fibra', 79.90, 20, 'maza_stanley_fatmax_fmemfm18xb1.jpg'),
 ('Casco Forestal Husqvarna Technical XR', 'accesorio', 'Husqvarna', 'Casco técnico con protección para tala intensiva', 99.90, 15, 'casco_husqvarna_technical_xr.jpg'),
-('Kit Limpieza Motosierra Stihl Premium', 'accesorio', 'Stihl', 'Kit de limpieza y mantenimiento para motosierra', 39.00, 30, 'kit_limpieza_motosierra_stihl_premium.jpg');
-
+('Kit Limpieza Motosierra Stihl Premium', 'accesorio', 'Stihl', 'Kit de limpieza y mantenimiento para motosierra', 39.00, 30, 'kit_limpieza_motosierra_stihl_premium.jpg'),
+-- Nuevos productos
+('Visual Studio Code', 'software', 'Microsoft', 'Editor de código fuente ligero y potente con extensiones y debugger integrado', 0.00, 999, 'vscode.jpg'),
+('IntelliJ IDEA Ultimate', 'software', 'JetBrains', 'IDE profesional para desarrollo Java con soporte para múltiples frameworks', 149.00, 500, 'intellij_ultimate.jpg'),
+('PyCharm Professional', 'software', 'JetBrains', 'Entorno de desarrollo integrado específico para Python con análisis de código', 89.00, 500, 'pycharm_professional.jpg'),
+('Sublime Text 4', 'software', 'Sublime HQ', 'Editor de texto sofisticado para código con API de Python', 99.00, 999, 'sublime_text4.jpg'),
+('WebStorm', 'software', 'JetBrains', 'IDE especializado en desarrollo JavaScript y tecnologías web modernas', 59.00, 500, 'webstorm.jpg');
